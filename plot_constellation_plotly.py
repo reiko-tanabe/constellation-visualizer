@@ -158,7 +158,8 @@ def add_au_circle(fig, au_radius: float, exaggerate: float = 1.0, z_plane: float
 
 # ---------- 3D図をHTMLへ ----------
 def plot_constellation_html(csv_path: str, out_html: str, edges_path: Optional[str] = None,
-                            title: Optional[str] = None, show_labels: bool = True):
+                            title: Optional[str] = None, show_labels: bool = True,
+                            y_scale: float = 1.0):
     stars = load_stars_csv(csv_path)
     edges_raw = load_edges_json(edges_path)
     if not title:
@@ -169,6 +170,7 @@ def plot_constellation_html(csv_path: str, out_html: str, edges_path: Optional[s
     if edges_path:
         print(f"[INFO] edges file: {edges_path}")
     print(f"[INFO] edges loaded: {len(edges_raw)}")
+    print(f"[INFO] y-axis scale: {y_scale}×")
 
     # 名前→インデックス（正規化キー）
     name_to_index: Dict[str, int] = {s["name_norm"]: i for i, s in enumerate(stars)}
@@ -302,7 +304,8 @@ def plot_constellation_html(csv_path: str, out_html: str, edges_path: Optional[s
             xaxis_title="x (ly)",
             yaxis_title="y (ly)",
             zaxis_title="z (ly)",
-            aspectmode="data"  # 等尺
+            aspectmode="manual",
+            aspectratio=dict(x=1, y=y_scale, z=1)
         ),
         margin=dict(l=0, r=0, t=40, b=0)
     )
@@ -315,11 +318,18 @@ def parse_args(argv: List[str]):
     show_labels = True
     title = None
     files = []
+    y_scale = 1.0
+
     for a in argv[1:]:
         if a == "--no-labels":
             show_labels = False
         elif a.startswith("--title="):
             title = a.split("=", 1)[1]
+        elif a.startswith("--y-scale="):
+            try:
+                y_scale = float(a.split("=", 1)[1])
+            except ValueError:
+                print("[WARN] invalid value for --y-scale (use a number, e.g. 2.5)")
         else:
             files.append(a)
 
@@ -335,8 +345,8 @@ def parse_args(argv: List[str]):
         csv_path, out_html = files
         edges_path = None
 
-    return csv_path, edges_path, out_html, title, show_labels
+    return csv_path, edges_path, out_html, title, show_labels, y_scale
 
 if __name__ == "__main__":
-    csv_path, edges_path, out_html, title, show_labels = parse_args(sys.argv)
-    plot_constellation_html(csv_path, out_html, edges_path, title=title, show_labels=show_labels)
+    csv_path, edges_path, out_html, title, show_labels, y_scale = parse_args(sys.argv)
+    plot_constellation_html(csv_path, out_html, edges_path, title=title, show_labels=show_labels, y_scale=y_scale)

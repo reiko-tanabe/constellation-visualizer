@@ -1,0 +1,15 @@
+[
+  ["Meissa (λ Ori)", "Betelgeuse (α Ori)"],
+  ["Meissa (λ Ori)", "Bellatrix (γ Ori)"],
+  ["Betelgeuse (α Ori)", "Bellatrix (γ Ori)"],
+
+  ["Bellatrix (γ Ori)", "Mintaka (δ Ori)"],
+  ["Mintaka (δ Ori)", "Alnilam (ε Ori)"],
+  ["Alnilam (ε Ori)", "Alnitak (ζ Ori)"],
+
+  ["Alnitak (ζ Ori)", "Saiph (κ Ori)"],
+  ["Saiph (κ Ori)", "Rigel (β Ori)"],
+  ["Rigel (β Ori)", "Mintaka (δ Ori)"],
+
+  ["Betelgeuse (α Ori)", "Alnitak (ζ Ori)"]
+]
